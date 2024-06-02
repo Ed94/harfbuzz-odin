@@ -1,10 +1,3 @@
-function Verify-Path { param( $path )
-	if (test-path $path) {return $true}
-
-	new-item -ItemType Directory -Path $path
-	return $false
-}
-
 function Clone-Gitrepo { param( [string] $path, [string] $url )
 	if (test-path $path) {
 		# git -C $path pull
@@ -13,6 +6,11 @@ function Clone-Gitrepo { param( [string] $path, [string] $url )
 		Write-Host "Cloning $url ..."
 		git clone $url $path
 	}
+}
+
+function Grab-Zip { param( $url, $path_file, $path_dst )
+	Invoke-WebRequest -Uri  $url       -OutFile         $path_file
+	Expand-Archive    -Path $path_file -DestinationPath $path_dst -Force
 }
 
 function Update-GitRepo
@@ -64,4 +62,11 @@ function Update-GitRepo
 	$latest_commit_hash | out-file $last_built_commit
 	$script:binaries_dirty = $true
 	write-host
+}
+
+function Verify-Path { param( $path )
+	if (test-path $path) {return $true}
+
+	new-item -ItemType Directory -Path $path
+	return $false
 }
