@@ -6,7 +6,9 @@ package harfbuzz
 import "core:c"
 
 when ODIN_OS == .Windows {
-	foreign import harfbuzz "./lib/win64/libharfbuzz-0.dll"
+	// @(extra_linker_flags="/NODEFAULTLIB:msvcrt")
+	// foreign import harfbuzz "./lib/win64/libharfbuzz-0.dll"
+	foreign import harfbuzz "./lib/win64/srcharfbuzz.lib"
 }
 
 Buffer        :: distinct rawptr     // hb_buffer_t*
