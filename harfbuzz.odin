@@ -8,7 +8,7 @@ import "core:c"
 when ODIN_OS == .Windows {
 	// @(extra_linker_flags="/NODEFAULTLIB:msvcrt")
 	// foreign import harfbuzz "./lib/win64/libharfbuzz-0.dll"
-	foreign import harfbuzz "./lib/win64/srcharfbuzz.lib"
+	foreign import harfbuzz "./lib/win64/harfbuzz.lib"
 }
 
 Buffer        :: distinct rawptr     // hb_buffer_t*
@@ -321,8 +321,6 @@ foreign harfbuzz
 	language_get_default :: proc() -> Language ---
 
 	script_get_horizontal_direction :: proc( script : Script ) -> Direction ---
-
-	set_language :: proc( buffer : Buffer, language : Language ) ---
 
 	shape :: proc( font : Font, buffer : Buffer, features : [^]Feature, num_features : c.uint ) ---
 
