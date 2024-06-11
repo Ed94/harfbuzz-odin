@@ -9,6 +9,7 @@ when ODIN_OS == .Windows {
 	// @(extra_linker_flags="/NODEFAULTLIB:msvcrt")
 	// foreign import harfbuzz "./lib/win64/libharfbuzz-0.dll"
 	foreign import harfbuzz "./lib/win64/harfbuzz.lib"
+	// foreign import harfbuzz "./lib/win64/libharfbuzz.a"
 }
 
 Buffer        :: distinct rawptr     // hb_buffer_t*
