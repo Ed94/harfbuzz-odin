@@ -304,7 +304,7 @@ foreign harfbuzz
 	blob_destroy :: proc( blob : Blob ) ---
 
 	buffer_create              :: proc() -> Buffer ---
-	buffer_destory             :: proc( buffer : Buffer) ---
+	buffer_destroy             :: proc( buffer : Buffer ) ---
 	buffer_add                 :: proc( buffer : Buffer, codepoint : Codepoint, cluster : c.uint ) ---
 	buffer_clear_contents      :: proc( buffer : Buffer ) ---
 	buffer_get_glyph_infos     :: proc( buffer : Buffer, length    : ^c.uint ) -> [^]Glyph_Info ---
