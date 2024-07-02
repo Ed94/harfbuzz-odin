@@ -8,8 +8,7 @@ $path_win64 = join-path $path_lib  'win64'
 $url_harfbuzz  = 'https://github.com/harfbuzz/harfbuzz.git'
 $path_harfbuzz = join-path $path_root 'harfbuzz'
 
-function build-repo
-{
+function build-repo {
 	verify-path $script:path_lib
 	verify-path $path_win64
 
@@ -62,11 +61,9 @@ function build-repo
 
 	write-host "Build completed and files copied to $path_win64"
 }
-build-repo
+# build-repo
 
-# NOTE : NOT DONE WIP.
-function Build-RepoWithoutMeson
-{
+function Build-RepoWithoutMeson {
     $devshell = join-path $PSScriptRoot 'helpers/devshell.ps1'
     & $devshell -arch amd64
 
@@ -128,8 +125,7 @@ function Build-RepoWithoutMeson
 #define HB_HAVE_OT 1
 #define HB_USER_DATA_KEY_DEFINE1(_name) extern HB_EXTERN hb_user_data_key_t _name
 "@
-
-    Set-Content -Path (Join-Path $path_harfbuzz "config.h") -Value $config_h_content
+    set-content -Path (join-path $path_harfbuzz "config.h") -Value $config_h_content
 
     $unity_content = @"
 #define HB_EXTERN __declspec(dllexport)
@@ -139,8 +135,11 @@ function Build-RepoWithoutMeson
 #include "hb-aat-map.cc"
 #include "hb-blob.cc"
 #include "hb-buffer.cc"
+#include "hb-buffer-serialize.cc"
+#include "hb-buffer-verify.cc"
 #include "hb-common.cc"
 #include "hb-face.cc"
+#include "hb-face-builder.cc"
 #include "hb-fallback-shape.cc"
 #include "hb-font.cc"
 #include "hb-map.cc"
@@ -165,11 +164,16 @@ function Build-RepoWithoutMeson
 #include "hb-subset-cff-common.cc"
 #include "hb-subset-cff1.cc"
 #include "hb-subset-cff2.cc"
+#include "hb-subset-instancer-iup.cc"
+#include "hb-subset-instancer-solver.cc"
 #include "hb-subset-input.cc"
 #include "hb-subset-plan.cc"
 #include "hb-ot-color.cc"
+#include "hb-ot-cff1-table.cc"
+#include "hb-ot-cff2-table.cc"
 #include "hb-ot-metrics.cc"
 #include "hb-ot-name.cc"
+#include "hb-ot-shaper-indic-table.cc"
 #include "hb-ot-shaper-arabic.cc"
 #include "hb-ot-shaper-default.cc"
 #include "hb-ot-shaper-hangul.cc"
@@ -182,10 +186,10 @@ function Build-RepoWithoutMeson
 #include "hb-ot-shaper-use.cc"
 #include "hb-ot-shaper-vowel-constraints.cc"
 #include "hb-ucd.cc"
+#include "graph/gsubgpos-context.cc"
 "@
-
-    $unity_file = Join-Path $path_harfbuzz_build "harfbuzz_unity.cc"
-    Set-Content -Path $unity_file -Value $unity_content
+    $unity_file = join-path $path_harfbuzz_build "harfbuzz_unity.cc"
+    set-content -Path $unity_file -Value $unity_content
 
     # Compile unity file
     $obj_file = "harfbuzz_unity.obj"
@@ -260,7 +264,7 @@ function Build-RepoWithoutMeson
 
     write-host "Build completed and files copied to $path_win64"
 }
-# Build-RepoWithoutMeson
+Build-RepoWithoutMeson
 
 function grab-binaries {
 	verify-path $script:path_lib
