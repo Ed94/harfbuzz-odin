@@ -8,7 +8,6 @@ $path_win64 = join-path $path_lib  'win64'
 $url_harfbuzz  = 'https://github.com/harfbuzz/harfbuzz.git'
 $path_harfbuzz = join-path $path_root 'harfbuzz'
 
-# Verify-Path   $path_harfbuzz
 function build-repo {
 	verify-path $script:path_lib
 	verify-path $path_win64
@@ -17,25 +16,52 @@ function build-repo {
 
 	push-location $path_harfbuzz
 
-	# meson reconfigure
-	meson build --default-library=static --buildtype=release --wrap-mode=forcefallback -Dglib=disabled -Dgobject=disabled -Dcairo=disabled -Dicu=disabled -Dgraphite=disabled -Dfreetype=disabled -Ddirectwrite=disabled -Dcoretext=disabled
-	meson test -Cbuild
+    $library_type = "shared"
+    $build_type   = "release"
+
+    # Meson configure and build
+    $mesonArgs = @(
+        "build",
+        "--default-library=$library_type",
+        "--buildtype=$build_type",
+        "--wrap-mode=forcefallback",
+        "-Dglib=disabled",
+        "-Dgobject=disabled",
+        "-Dcairo=disabled",
+        "-Dicu=disabled",
+        "-Dgraphite=disabled",
+        "-Dfreetype=disabled",
+        "-Ddirectwrite=disabled",
+        "-Dcoretext=disabled"
+    )
+    & meson $mesonArgs
+	& meson compile -C build
 
 	pop-location
 
-	$path_build        = join-path $path_harfbuzz 'build'
-	$path_src          = join-path $path_build    'src'
-	$path_dll          = join-path $path_src      'harfbuzz.dll'
-	$path_lib          = join-path $path_src      'harfbuzz.lib'
-	$path_pdb          = join-path $path_src      'harfbuzz.pdb'
-	# $path_freetype_dll = join-path $path_build    'subprojects\freetype-2.13.0\freetype-6.dll'
+	$path_build      = join-path $path_harfbuzz 'build'
+	$path_src        = join-path $path_build    'src'
+	$path_dll        = join-path $path_src      'harfbuzz.dll'
+	$path_lib        = join-path $path_src      'harfbuzz.lib'
+	$path_lib_static = join-path $path_src      'libharfbuzz.a'
+	$path_pdb        = join-path $path_src      'harfbuzz.pdb'
 
-	copy-item -destination $path_win64 -path $path_lib -force
-	# copy-item -destination $path_win64 -path $path_dll -force
-	# copy-item -destination $path_win64 -path $path_pdb -force
-	# copy-item -destination $path_win64 -path $path_freetype_dll -Force
+	# Copy files based on build type and library type
+	if ($build_type -eq "debug") {
+		copy-item -Path $path_pdb -Destination $path_win64 -Force
+	}
+
+	if ($library_type -eq "static") {
+		copy-item -Path $path_lib_static -Destination (join-path $path_win64 'harfbuzz.lib') -Force
+	}
+	else {
+		copy-item -Path $path_lib -Destination $path_win64 -Force
+		copy-item -Path $path_dll -Destination $path_win64 -Force
+	}
+
+	write-host "Build completed and files copied to $path_win64"
 }
-Build-Repo
+build-repo
 
 function grab-binaries {
 	verify-path $script:path_lib
