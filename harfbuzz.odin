@@ -69,6 +69,12 @@ Segment_Properties :: struct {
 	reserved2 : rawptr,
 }
 
+Buffer_Content_Type :: enum c.uint {
+	INVALID = 0,
+  UNICODE,
+  GLYPHS
+}
+
 Direction :: enum c.uint {
 	INVALID = 0,
 	LGR     = 4,
@@ -104,7 +110,7 @@ Script :: enum u32 {
 	KANNADA    = ( u32('K') & 0xFF ) << 24 | ( u32('a') & 0xFF ) << 16 | ( u32('d') & 0xFF ) << 8 | ( u32('a') & 0xFF ),
 	KATAKANA   = ( u32('K') & 0xFF ) << 24 | ( u32('a') & 0xFF ) << 16 | ( u32('n') & 0xFF ) << 8 | ( u32('a') & 0xFF ),
 	LAO        = ( u32('L') & 0xFF ) << 24 | ( u32('a') & 0xFF ) << 16 | ( u32('o') & 0xFF ) << 8 | ( u32('o') & 0xFF ),
-	LATIN      = ( u32('K') & 0xFF ) << 24 | ( u32('a') & 0xFF ) << 16 | ( u32('t') & 0xFF ) << 8 | ( u32('n') & 0xFF ),
+	LATIN      = ( u32('L') & 0xFF ) << 24 | ( u32('a') & 0xFF ) << 16 | ( u32('t') & 0xFF ) << 8 | ( u32('n') & 0xFF ),
 	MALAYALAN  = ( u32('M') & 0xFF ) << 24 | ( u32('l') & 0xFF ) << 16 | ( u32('y') & 0xFF ) << 8 | ( u32('m') & 0xFF ),
 	ORIYA      = ( u32('O') & 0xFF ) << 24 | ( u32('r') & 0xFF ) << 16 | ( u32('y') & 0xFF ) << 8 | ( u32('a') & 0xFF ),
 	TAMIL      = ( u32('T') & 0xFF ) << 24 | ( u32('a') & 0xFF ) << 16 | ( u32('m') & 0xFF ) << 8 | ( u32('l') & 0xFF ),
@@ -307,11 +313,12 @@ foreign harfbuzz
 	buffer_destroy             :: proc( buffer : Buffer ) ---
 	buffer_add                 :: proc( buffer : Buffer, codepoint : Codepoint, cluster : c.uint ) ---
 	buffer_clear_contents      :: proc( buffer : Buffer ) ---
-	buffer_get_glyph_infos     :: proc( buffer : Buffer, length    : ^c.uint ) -> [^]Glyph_Info ---
-	buffer_get_glyph_positions :: proc( buffer : Buffer, length    : ^c.uint ) -> [^]Glyph_Position ---
-	buffer_set_direction       :: proc( buffer : Buffer, direction : Direction ) ---
-	buffer_set_language        :: proc( buffer : Buffer, language  : Language ) ---
-	buffer_set_script          :: proc( buffer : Buffer, script    : Script ) ---
+	buffer_get_glyph_infos     :: proc( buffer : Buffer, length       : ^c.uint ) -> [^]Glyph_Info ---
+	buffer_get_glyph_positions :: proc( buffer : Buffer, length       : ^c.uint ) -> [^]Glyph_Position ---
+	buffer_set_direction       :: proc( buffer : Buffer, direction    : Direction ) ---
+	buffer_set_language        :: proc( buffer : Buffer, language     : Language ) ---
+	buffer_set_script          :: proc( buffer : Buffer, script       : Script ) ---
+	buffer_set_content_type    :: proc( buffer : Buffer, content_type : Buffer_Content_Type ) ---
 
 	face_create  :: proc( blob : Blob, index : c.uint ) -> Face ---
 	face_destroy :: proc( face : Face ) ---

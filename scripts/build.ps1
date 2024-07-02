@@ -18,8 +18,7 @@ function build-repo {
 	push-location $path_harfbuzz
 
 	# meson reconfigure
-	# meson build --default-library=static --buildtype=debug --wrap-mode=forcefallback
-	meson build --default-library=shared --buildtype=debug --wrap-mode=forcefallback -Dglib=disabled -Dgobject=disabled -Dcairo=disabled -Dicu=disabled -Dgraphite=disabled -Dfreetype=disabled -Ddirectwrite=disabled -Dcoretext=disabled
+	meson build --default-library=static --buildtype=release --wrap-mode=forcefallback -Dglib=disabled -Dgobject=disabled -Dcairo=disabled -Dicu=disabled -Dgraphite=disabled -Dfreetype=disabled -Ddirectwrite=disabled -Dcoretext=disabled
 	meson test -Cbuild
 
 	pop-location
@@ -31,9 +30,9 @@ function build-repo {
 	$path_pdb          = join-path $path_src      'harfbuzz.pdb'
 	# $path_freetype_dll = join-path $path_build    'subprojects\freetype-2.13.0\freetype-6.dll'
 
-	copy-item -destination $path_win64 -path $path_dll -force
 	copy-item -destination $path_win64 -path $path_lib -force
-	copy-item -destination $path_win64 -path $path_pdb -force
+	# copy-item -destination $path_win64 -path $path_dll -force
+	# copy-item -destination $path_win64 -path $path_pdb -force
 	# copy-item -destination $path_win64 -path $path_freetype_dll -Force
 }
 Build-Repo
