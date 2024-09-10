@@ -11,6 +11,9 @@ when ODIN_OS == .Windows {
 	foreign import harfbuzz "./lib/win64/harfbuzz.lib"
 	// foreign import harfbuzz "./lib/win64/libharfbuzz.a"
 }
+else when ODIN_OS == .Linux {
+	foreign import harfbuzz "./lib/linux64/libharfbuzz.so"
+}
 
 Buffer        :: distinct rawptr     // hb_buffer_t*
 Blob          :: distinct rawptr     // hb_blob_t*
