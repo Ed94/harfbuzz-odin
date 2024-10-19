@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Source the misc.sh script
-source "$(dirname "$0")/helpers/misc.sh"
+misc_script="$(dirname "$0")/helpers/misc.sh"
+chmod +x "$misc_script"
+source "$misc_script"
 
 path_root=$(git rev-parse --show-toplevel)
 path_lib="$path_root/lib"
