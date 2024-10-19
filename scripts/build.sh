@@ -84,7 +84,18 @@ build_repo_without_meson() {
 
     pushd "$path_harfbuzz" > /dev/null
 
+    # Determine the latest C++ standard supported by the compiler
+    latest_cpp_standard=$(clang++ -std=c++ -dM -E - < /dev/null | grep __cplusplus | awk '{print $3}')
+    case $latest_cpp_standard in
+        201703L) cpp_flag="-std=c++17" ;;
+        202002L) cpp_flag="-std=c++20" ;;
+        202302L) cpp_flag="-std=c++23" ;;
+        *) cpp_flag="-std=c++14" ;; # Default to C++14 if unable to determine
+    esac
+    echo "Using C++ standard: $cpp_flag"
+
     compiler_args=(
+        "$cpp_flag"
         "-Wall"
         "-Wextra"
         "-D_REENTRANT"
