@@ -7,14 +7,34 @@ source "$misc_script"
 
 path_root=$(git rev-parse --show-toplevel)
 path_lib="$path_root/lib"
+path_osx="$path_lib/osx"
 path_linux64="$path_lib/linux64"
+
+# Detect the operating system
+OS=$(uname -s)
+
+# Set the appropriate output directory and file extension
+case "$OS" in
+    Darwin*)
+        output_dir="$path_osx"
+        shared_lib_extension="dylib"
+        ;;
+    Linux*)
+        output_dir="$path_linux64"
+        shared_lib_extension="so"
+        ;;
+    *)
+        echo "Unsupported operating system: $OS"
+        exit 1
+        ;;
+esac
 
 url_harfbuzz='https://github.com/harfbuzz/harfbuzz.git'
 path_harfbuzz="$path_root/harfbuzz"
 
 build_repo() {
     verify_path "$path_lib"
-    verify_path "$path_linux64"
+    verify_path "$path_output"
 
     clone_gitrepo "$path_harfbuzz" "$url_harfbuzz"
 
@@ -71,8 +91,11 @@ build_repo() {
 }
 
 build_repo_without_meson() {
+    # Detect the operating system
+    OS=$(uname -s)
+
     verify_path "$path_lib"
-    verify_path "$path_linux64"
+    verify_path "$path_output"
 
     clone_gitrepo "$path_harfbuzz" "$url_harfbuzz"
 
@@ -239,10 +262,10 @@ EOL
     popd > /dev/null  # path_harfbuzz
 
     # Copy files
-    cp "$path_harfbuzz_build/$output_file" "$path_linux64/"
+    cp "$path_harfbuzz_build/$output_file" "$path_output/"
     if [ "$library_type" = "shared" ]; then
         if [ -f "$path_harfbuzz_build/libharfbuzz.so" ]; then
-            cp "$path_harfbuzz_build/libharfbuzz.so" "$path_linux64/"
+            cp "$path_harfbuzz_build/libharfbuzz.so" "$path_output/"
         fi
     fi
 
