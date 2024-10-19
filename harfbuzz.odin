@@ -17,7 +17,7 @@ else when ODIN_OS == .Linux {
 }
 else when ODIN_OS == .Darwin {
 	// foreign import harfbuzz { "./lib/osx/libharfbuzz.so" }
-	foreign import harfbuzz "system:libharfbuzz"
+	foreign import harfbuzz "system:harfbuzz"
 }
 
 Buffer        :: distinct rawptr     // hb_buffer_t*
