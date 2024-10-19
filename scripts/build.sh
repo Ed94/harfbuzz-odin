@@ -10,7 +10,6 @@ path_lib="$path_root/lib"
 path_osx="$path_lib/osx"
 path_linux64="$path_lib/linux64"
 
-# Detect the operating system
 OS=$(uname -s)
 
 # Set the appropriate output directory and file extension
@@ -269,7 +268,7 @@ EOL
         fi
     fi
 
-    echo "Build completed and files copied to $path_linux64"
+    echo "Build completed and files copied to $path_output"
 }
 
 # Uncomment the function you want to use
