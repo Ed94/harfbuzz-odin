@@ -107,7 +107,7 @@ build_repo_without_meson() {
     pushd "$path_harfbuzz" > /dev/null
 
     # Determine the latest C++ standard supported by the compiler
-    latest_cpp_standard=$(clang++ -std=c++ -dM -E - < /dev/null | grep __cplusplus | awk '{print $3}')
+    latest_cpp_standard=$(clang++ -dM -E - < /dev/null | grep __cplusplus | awk '{print $3}')
     case $latest_cpp_standard in
         201703L) cpp_flag="-std=c++17" ;;
         202002L) cpp_flag="-std=c++20" ;;
