@@ -35,6 +35,7 @@ build_repo() {
     verify_path "$path_lib"
     verify_path "$path_output"
 
+    # grab the actual repo
     clone_gitrepo "$path_harfbuzz" "$url_harfbuzz"
 
     pushd "$path_harfbuzz" > /dev/null
@@ -93,14 +94,21 @@ build_repo_without_meson() {
     # Detect the operating system
     OS=$(uname -s)
 
+    echo $url_harfbuzz
+    echo $path_harfbuzz
+    echo $path_lib
+    echo $path_linux64
     verify_path "$path_lib"
-    verify_path "$path_output"
-
-    clone_gitrepo "$path_harfbuzz" "$url_harfbuzz"
+    verify_path "$path_linux64"
 
     path_harfbuzz_build="$path_harfbuzz/build"
-    verify_path "$path_harfbuzz_build"
+    echo $path_harfbuzz_build
 
+    # grab the actual repo
+    clone_gitrepo "$path_harfbuzz" "$url_harfbuzz"
+
+    verify_path "$path_harfbuzz_build"
+  
     library_type="shared"
     build_type="release"
 
@@ -261,14 +269,14 @@ EOL
     popd > /dev/null  # path_harfbuzz
 
     # Copy files
-    cp "$path_harfbuzz_build/$output_file" "$path_output/"
+    cp "$path_harfbuzz_build/$output_file" "$path_linux64/"
     if [ "$library_type" = "shared" ]; then
         if [ -f "$path_harfbuzz_build/libharfbuzz.so" ]; then
-            cp "$path_harfbuzz_build/libharfbuzz.so" "$path_output/"
+            cp "$path_harfbuzz_build/libharfbuzz.so" "$path_linux64/"
         fi
     fi
 
-    echo "Build completed and files copied to $path_output"
+    echo "Build completed and files copied to $path_linux64"
 }
 
 # Uncomment the function you want to use
