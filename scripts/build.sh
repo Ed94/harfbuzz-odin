@@ -15,11 +15,11 @@ OS=$(uname -s)
 # Set the appropriate output directory and file extension
 case "$OS" in
     Darwin*)
-        output_dir="$path_osx"
+        path_output="$path_osx"
         shared_lib_extension="dylib"
         ;;
     Linux*)
-        output_dir="$path_linux64"
+        path_output="$path_linux64"
         shared_lib_extension="so"
         ;;
     *)

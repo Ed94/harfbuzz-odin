@@ -13,7 +13,7 @@ when ODIN_OS == .Windows {
 }
 else when ODIN_OS == .Linux {
 	// foreign import harfbuzz "./lib/linux64/libharfbuzz.so"
-	foreign import harfbuzz "libharfbuzz.so"
+	foreign import harfbuzz "system:harfbuzz"
 }
 else when ODIN_OS == .Darwin {
 	// foreign import harfbuzz { "./lib/osx/libharfbuzz.so" }
